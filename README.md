@@ -145,13 +145,21 @@ Example docker-compose
 version: "3"
 services:
   chirpstack-packet-multiplexer:
-    image: chirpstack-packet-multiplexer:latest
+    image: brocaar/chirpstack-packet-multiplexer:latest
+    build:
+      context: https://github.com/wasalm/chirpstack-packet-multiplexer.git
+    container_name: chirpstack-packet-multiplexer
     ports:
       - 1700:1700/udp
     volumes:
-      - ./:/chirpstack-packet-multiplexer
       - ./config/chirpstack-packet-multiplexer.toml:/etc/chirpstack-packet-multiplexer/chirpstack-packet-multiplexer.toml:ro
+    ulimits:
+      nofile:
+        soft: 64000
+        hard: 64000
+    restart: unless-stopped
 ```
+
 To run...
 ```docker-compose up```
 
